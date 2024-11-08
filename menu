@@ -8,48 +8,66 @@ let showStrength = false;
 let selectedWorkout = "";
 let countdownTime = 0;  
 let startTime = 0;  
-let gradientImage;
 
 function setup() {
   createCanvas(1000, 1000);
+
   textFont('Poppins');
-  
-  // Create buttons
-  startButton = createStyledButton('Start', width / 2 - 75, height / 2 + 50, 150, 50, '24px');
+
+  startButton = createButton('Start');
+  startButton.position(width / 2 - 75, height / 2 + 50);
+  startButton.size(150, 50);
+  startButton.style('font-size', '24px');
+  startButton.style('font-family', 'Poppins');
+  startButton.style('background-color', '#ffffff');
+  startButton.style('color', '#000000');
   startButton.mousePressed(startGame);
 
-  cardioButton = createStyledButton('Cardio', width / 2 - 100, 300, 250, 70, '28px');
-  cardioButton.mousePressed(toggleCardioDropdown);
+  cardioButton = createButton('Cardio');
+  cardioButton.position(width / 2 - 100, 300);
+  cardioButton.size(250, 70);
+  cardioButton.style('font-size', '28px');
+  cardioButton.style('font-family', 'Poppins');
+  cardioButton.style('background-color', '#ffffff');
+  cardioButton.style('color', '#000000');
   cardioButton.hide();
+  cardioButton.mousePressed(toggleCardioDropdown);
 
-  strengthButton = createStyledButton('Strength', width / 2 - 100, 400, 250, 70, '28px');
-  strengthButton.mousePressed(toggleStrengthDropdown);
+  strengthButton = createButton('Strength');
+  strengthButton.position(width / 2 - 100, 400);
+  strengthButton.size(250, 70);
+  strengthButton.style('font-size', '28px');
+  strengthButton.style('font-family', 'Poppins');
+  strengthButton.style('background-color', '#ffffff');
+  strengthButton.style('color', '#000000');
   strengthButton.hide();
+  strengthButton.mousePressed(toggleStrengthDropdown);
 
-  backButton = createStyledButton('Back', width / 2 - 50, height - 100, 100, 40, '20px');
-  backButton.mousePressed(goBackToWorkoutMenu);
+  backButton = createButton('Back');
+  backButton.position(width / 2 - 50, height - 100);
+  backButton.size(100, 40);
+  backButton.style('font-size', '20px');
+  backButton.style('font-family', 'Poppins');
+  backButton.style('background-color', '#ffffff');
+  backButton.style('color', '#000000');
   backButton.hide();
+  backButton.mousePressed(goBackToWorkoutMenu);
 
-  // Create dropdowns
   cardioDropdown = createSelect();
   cardioDropdown.position(width / 2 - 100, 370);
   cardioDropdown.option('Select your workout');
   cardioDropdown.option('15-min Run');
   cardioDropdown.option('30-min Run');
-  cardioDropdown.changed(startSelectedCardio);
   cardioDropdown.hide();
+  cardioDropdown.changed(startSelectedCardio);
 
   strengthDropdown = createSelect();
   strengthDropdown.position(width / 2 - 100, 470);
   strengthDropdown.option('Select your workout');
   strengthDropdown.option('1-min Push-Ups');
   strengthDropdown.option('1-min Planks');
-  strengthDropdown.changed(startSelectedStrength);
   strengthDropdown.hide();
-
-  // Pre-calculate and cache gradient
-  gradientImage = createImage(width, height);
-  drawGradient(gradientImage);
+  strengthDropdown.changed(startSelectedStrength);
 }
 
 function draw() {
@@ -64,6 +82,8 @@ function draw() {
 
 function drawWelcomeScreen() {
   background(173, 216, 230);  
+
+  textFont('Poppins');
   textAlign(CENTER);
   textSize(64);  
   textStyle(BOLD);  
@@ -78,12 +98,15 @@ function startGame() {
 }
 
 function drawWorkoutMenu() {
-  image(gradientImage, 0, 0);
+  drawGradient();  
   fill(0);
   textSize(48);  
   textStyle(BOLD);  
   textAlign(CENTER);
   text('Select Your Workout', width / 2, 150);  
+
+  cardioButton.position(width / 2 - 125, 300);
+  strengthButton.position(width / 2 - 125, 400);
 }
 
 function showWorkoutMenu() {
@@ -93,14 +116,22 @@ function showWorkoutMenu() {
 
 function toggleCardioDropdown() {
   showCardio = !showCardio;
-  cardioDropdown.style('display', showCardio ? 'block' : 'none');
-  strengthDropdown.hide();
+  if (showCardio) {
+    cardioDropdown.show();
+    strengthDropdown.hide();  
+  } else {
+    cardioDropdown.hide();
+  }
 }
 
 function toggleStrengthDropdown() {
   showStrength = !showStrength;
-  strengthDropdown.style('display', showStrength ? 'block' : 'none');
-  cardioDropdown.hide();
+  if (showStrength) {
+    strengthDropdown.show();
+    cardioDropdown.hide();  
+  } else {
+    strengthDropdown.hide();
+  }
 }
 
 function startSelectedCardio() {
@@ -117,7 +148,9 @@ function startSelectedCardio() {
 
 function startSelectedStrength() {
   let workout = strengthDropdown.value();
-  if (workout === '1-min Push-Ups' || workout === '1-min Planks') {
+  if (workout === '1-min Push-Ups') {
+    countdownTime = 1 * 60;  
+  } else if (workout === '1-min Planks') {
     countdownTime = 1 * 60;  
   }
   if (workout !== 'Select your workout') {
@@ -149,6 +182,7 @@ function drawCountdown() {
   let seconds = remainingTime % 60;
   let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
 
+  textFont('Poppins');
   textAlign(CENTER);
   textSize(128);  
   fill(0);  
@@ -169,30 +203,12 @@ function goBackToWorkoutMenu() {
   backButton.hide();  
 }
 
-function drawGradient(img) {
-  for (let i = 0; i <= img.height; i++) {
-    let inter = map(i, 0, img.height, 0, 1);
+function drawGradient() {
+  for (let i = 0; i <= height; i++) {
+    let inter = map(i, 0, height, 0, 1);
     let c = lerpColor(color(173, 216, 230), color(138, 43, 226), inter);  
-    img.loadPixels();
-    for (let j = 0; j < img.width; j++) {
-      let index = (j + i * img.width) * 4;
-      img.pixels[index + 0] = red(c);
-      img.pixels[index + 1] = green(c);
-      img.pixels[index + 2] = blue(c);
-      img.pixels[index + 3] = 255; // Alpha channel
-    }
-    img.updatePixels();
+    stroke(c);
+    line(0, i, width, i);
   }
 }
 
-// Helper function to create styled buttons
-function createStyledButton(label, x, y, width, height, fontSize) {
-  let button = createButton(label);
-  button.position(x, y);
-  button.size(width, height);
-  button.style('font-size', fontSize);
-  button.style('font-family', 'Poppins');
-  button.style('background-color', '#ffffff');
-  button.style('color', '#000000');
-  return button;
-}

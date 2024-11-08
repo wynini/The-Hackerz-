@@ -74,6 +74,11 @@ function setup() {
   strengthDropdown.option('1-min Planks');
   strengthDropdown.hide();
   strengthDropdown.changed(startSelectedStrength);
+
+outer_Xp = {
+    height:300,
+    length:50,
+    size: 1
 }
 
 function draw() {
@@ -91,6 +96,8 @@ function draw() {
   rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
 
   //Inner rectangle
+  min_Xp += XP_increment;
+  min_Xp = min(min_Xp, max_Xp - 25);
 
   min_Xp += XP_increment;
   min_Xp = min(min_Xp, max_Xp);

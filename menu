@@ -10,7 +10,7 @@ function setup() {
   textAlign(CENTER);
   textSize(48); 
   fill(0);
-  text('Select Your Workout', width / 2, 150);  
+  text('Select Your Workout', width / 2, 150); 
 
 
   cardioButton = createButton('Cardio');
@@ -19,67 +19,59 @@ function setup() {
   cardioButton.style('font-size', '24px');  
   cardioButton.mousePressed(toggleCardioDropdown);
 
+
   strengthButton = createButton('Strength');
-  strengthButton.position(width / 2 - 75, 400); 
+  strengthButton.position(width / 2 - 75, 400);  
   strengthButton.size(200, 60);  
-  strengthButton.style('font-size', '24px');  
+  strengthButton.style('font-size', '24px'); 
   strengthButton.mousePressed(toggleStrengthDropdown);
 
   cardioDropdown = createSelect();
-  cardioDropdown.position(width / 2 - 75, 300);  
-  cardioDropdown.option('Select a Cardio Workout');
+  cardioDropdown.position(width / 2 - 75, 300); 
   cardioDropdown.option('2KM Run');
   cardioDropdown.option('Jumping Jacks');
-  cardioDropdown.hide();  
-  // Create the dropdown for strength workouts (but hide it initially)
+  cardioDropdown.hide(); 
+
   strengthDropdown = createSelect();
-  strengthDropdown.position(width / 2 - 75, 400);  // Dropdown appears right on the Strength button
-  strengthDropdown.option('Select a Strength Workout');
+  strengthDropdown.position(width / 2 - 75, 400); 
   strengthDropdown.option('1-min Push-Ups');
   strengthDropdown.option('1-min Planks');
-  strengthDropdown.hide();  // Hide the dropdown initially
+  strengthDropdown.hide();  
 }
 
 function draw() {
-  // The menu remains static; nothing to animate in draw yet
-  // If dropdown is being shown, animate it into position smoothly
   if (showCardio) {
-    cardioDropdown.show();
-    cardioDropdown.position(width / 2 - 75, 300);  // Stay directly on the Cardio button
+    cardioDropdown.show();  
   } else {
     cardioDropdown.hide();
   }
 
   if (showStrength) {
-    strengthDropdown.show();
-    strengthDropdown.position(width / 2 - 75, 400);  // Stay directly on the Strength button
+    strengthDropdown.show();  
   } else {
     strengthDropdown.hide();
   }
 }
 
-// Function to create the gradient background
 function drawGradient() {
   for (let i = 0; i <= height; i++) {
     let inter = map(i, 0, height, 0, 1);
-    let c = lerpColor(color(173, 216, 230), color(138, 43, 226), inter); // Light blue to purple gradient
+    let c = lerpColor(color(173, 216, 230), color(138, 43, 226), inter); 
     stroke(c);
     line(0, i, width, i);
   }
 }
 
-// Toggle the display of the Cardio dropdown
 function toggleCardioDropdown() {
   showCardio = !showCardio;
   if (showCardio) {
-    showStrength = false; // Hide strength dropdown if cardio is being shown
+    showStrength = false; 
   }
 }
 
-// Toggle the display of the Strength dropdown
 function toggleStrengthDropdown() {
   showStrength = !showStrength;
   if (showStrength) {
-    showCardio = false; // Hide cardio dropdown if strength is being shown
+    showCardio = false; 
   }
 }

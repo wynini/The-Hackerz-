@@ -3,13 +3,12 @@ let cardioDropdown, strengthDropdown;
 let homeButton, profileButton, toolsButton;
 
 function setup() {
-  // Create a larger canvas for the game (800x800)
+
   createCanvas(1000, 1000);
 
-  // Draw gradient background
+
   drawGradient();
 
-  // Load and set the font to Arial Black
   textFont('Arial Black');
 
   // Title of the Menu with bigger font size
@@ -48,23 +47,23 @@ function setup() {
   strengthDropdown.option('1-min Planks');
   strengthDropdown.hide();  // Hide the dropdown initially
 
-  // Create Home, Profile, Tools buttons
+  // Create Home, Profile, Tools buttons at the top-right of the screen
   homeButton = createButton('Home');
-  homeButton.position(50, 650);  // Position for Home button
-  homeButton.size(150, 50);
-  homeButton.style('font-size', '24px');
+  homeButton.position(width - 150, 50);  // Position for Home button (top-right corner)
+  homeButton.size(100, 40);
+  homeButton.style('font-size', '18px');
   homeButton.mousePressed(goHome);
 
   profileButton = createButton('Profile');
-  profileButton.position(250, 650);  // Position for Profile button
-  profileButton.size(150, 50);
-  profileButton.style('font-size', '24px');
+  profileButton.position(width - 150, 100);  // Position for Profile button (below Home)
+  profileButton.size(100, 40);
+  profileButton.style('font-size', '18px');
   profileButton.mousePressed(goToProfile);
 
   toolsButton = createButton('Tools');
-  toolsButton.position(450, 650);  // Position for Tools button
-  toolsButton.size(150, 50);
-  toolsButton.style('font-size', '24px');
+  toolsButton.position(width - 150, 150);  // Position for Tools button (below Profile)
+  toolsButton.size(100, 40);
+  toolsButton.style('font-size', '18px');
   toolsButton.mousePressed(goToTools);
 }
 

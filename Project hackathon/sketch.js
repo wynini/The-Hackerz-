@@ -12,12 +12,12 @@ let level = 1;
 let min_Xp = 0;
 let max_Xp = 100;
 let XP_increment = 1;
-var outer_Xp;
-let coins_amount = 0;
+let outer_Xp;
+let coins_amount = 10; 
+let shopButton;
 
 function setup() {
   createCanvas(1000, 1000);
-
   textFont('Poppins');
 
   startButton = createButton('Start');
@@ -28,6 +28,15 @@ function setup() {
   startButton.style('background-color', '#ffffff');
   startButton.style('color', '#000000');
   startButton.mousePressed(startGame);
+
+  shopButton = createButton('🛒');
+  shopButton.position(width - 70, 30);
+  shopButton.size(60, 60);
+  shopButton.style('font-size', '32px');
+  shopButton.style('background-color', '#ffffff');
+  shopButton.style('color', '#000000');
+  shopButton.mousePressed(openShop);
+  shopButton.hide();
 
   cardioButton = createButton('Cardio');
   cardioButton.position(width / 2 - 100, 300);
@@ -86,6 +95,7 @@ function startGame() {
   gameState = "workout"; 
   startButton.hide();
   showWorkoutMenu();
+  fadeAmount = 255;
 }
 
 function draw() {
@@ -95,8 +105,16 @@ function draw() {
     drawWorkoutMenu();
   } else if (gameState === "countdown") {
     drawCountdown();
+  } else if (gameState === "shop") {
+    drawShopMenu();
   }
   drawCoin();
+  
+  if (fadeAmount > 0) {
+    fadeAmount -= 5;
+    fill(255, 255, 255, fadeAmount);
+    rect(0, 0, width, height);
+  }
 }
 
 function drawCoin() {
@@ -113,7 +131,6 @@ function drawCoin() {
 
 function drawWelcomeScreen() {
   background(173, 216, 230);
-
   textFont('Poppins');
   textAlign(CENTER);
   textSize(64);
@@ -132,6 +149,8 @@ function drawWorkoutMenu() {
 
   cardioButton.position(width / 2 - 125, 300);
   strengthButton.position(width / 2 - 125, 400);
+
+  shopButton.show();
 }
 
 function showWorkoutMenu() {
@@ -195,6 +214,7 @@ function goBackToWorkoutMenu() {
   gameState = "workout"; 
   showWorkoutMenu();
   backButton.hide();
+  fadeAmount = 255;
 }
 
 function drawCountdown() {
@@ -213,7 +233,7 @@ function drawCountdown() {
 
   let minutesPassed = floor(timePassed / 60);
   if (minutesPassed > coins_amount) {
-    coins_amount = minutesPassed; // Add 1 coin for every minute passed
+    coins_amount = minutesPassed;
   }
 
   textFont('Poppins');
@@ -230,4 +250,44 @@ function drawGradient() {
     stroke(c);
     line(0, i, width, i);
   }
+}
+
+function openShop() {
+  gameState = "shop";
+  shopButton.hide();
+  fadeAmount = 255;
+  hideWorkoutButtons();
+  drawShopMenu();
+}
+
+function hideWorkoutButtons() {
+  cardioButton.hide();
+  strengthButton.hide();
+}
+
+let shopItems = [
+  { name: "Cat 🐱", price: 10 },
+  { name: "Dog 🐶", price: 10 },
+  { name: "Bow 🎀", price: 3 },
+  { name: "Hat 🎩", price: 3 },
+  { name: "Sword 🗡️", price: 15 },
+  { name: "Shield 🛡️", price: 20 }
+];
+
+function drawShopMenu() {
+  background(255);
+
+  fill(0);
+  textSize(48);
+  textAlign(CENTER);
+  text("Shop", width / 2, 100);
+
+  let startY = 200;
+  for (let i = 0; i < shopItems.length; i++) {
+    let item = shopItems[i];
+    textSize(24);
+    text(`${item.name}: ${item.price} coins`, width / 2, startY + i * 40);
+  }
+
+  backButton.show();
 }

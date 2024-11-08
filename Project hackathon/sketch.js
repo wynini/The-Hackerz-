@@ -288,7 +288,7 @@ function drawShopMenu() {
   for (let i = 0; i < shopItems.length; i++) {
     let item = shopItems[i];
     textSize(24);
-    text(`${item.name}: ${item.price} coins`, width / 2, startY + i * 40);
+    text(`${item.name}: ${item.price} Coins`, width / 2, startY + i * 40);
   }
 
   backButton.show(); 

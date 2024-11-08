@@ -99,9 +99,6 @@ function draw() {
   min_Xp += XP_increment;
   min_Xp = min(min_Xp, max_Xp - 25);
 
-  min_Xp += XP_increment;
-  min_Xp = min(min_Xp, max_Xp);
-
   noStroke();
   fill(0, 0, 128);
   let barWidth = (min_Xp / max_Xp) * (outer_Xp.height + 100);

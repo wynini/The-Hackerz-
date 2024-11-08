@@ -1,110 +1,85 @@
 let cardioButton, strengthButton;
 let cardioDropdown, strengthDropdown;
-let homeButton, profileButton, toolsButton;
+let showCardio = false;
+let showStrength = false;
 
 function setup() {
-
   createCanvas(1000, 1000);
-
-
   drawGradient();
-
   textFont('Arial Black');
-
-  // Title of the Menu with bigger font size
   textAlign(CENTER);
-  textSize(48); // Larger font size for the title
+  textSize(48); 
   fill(0);
-  text('Select Your Workout', width / 2, 100);  // Adjusted position for larger canvas
+  text('Select Your Workout', width / 2, 150);  
 
-  // Create Cardio Button
+
   cardioButton = createButton('Cardio');
-  cardioButton.position(width / 2 - 75, 200);  // Adjusted button position
-  cardioButton.size(150, 50);  // Increased button size
-  cardioButton.style('font-size', '24px');  // Increase font size for button text
-  cardioButton.mousePressed(showCardioDropdown);
+  cardioButton.position(width / 2 - 75, 300);  
+  cardioButton.size(200, 60);  
+  cardioButton.style('font-size', '24px');  
+  cardioButton.mousePressed(toggleCardioDropdown);
 
-  // Create Strength Button
   strengthButton = createButton('Strength');
-  strengthButton.position(width / 2 - 75, 270);  // Adjusted button position
-  strengthButton.size(150, 50);  // Increased button size
-  strengthButton.style('font-size', '24px');  // Increase font size for button text
-  strengthButton.mousePressed(showStrengthDropdown);
+  strengthButton.position(width / 2 - 75, 400); 
+  strengthButton.size(200, 60);  
+  strengthButton.style('font-size', '24px');  
+  strengthButton.mousePressed(toggleStrengthDropdown);
 
-  // Create the dropdown for cardio workouts (but hide it initially)
   cardioDropdown = createSelect();
-  cardioDropdown.position(width / 2 - 75, 350);  // Dropdown below Cardio button
+  cardioDropdown.position(width / 2 - 75, 300);  
   cardioDropdown.option('Select a Cardio Workout');
   cardioDropdown.option('2KM Run');
   cardioDropdown.option('Jumping Jacks');
-  cardioDropdown.hide();  // Hide the dropdown initially
-
+  cardioDropdown.hide();  
   // Create the dropdown for strength workouts (but hide it initially)
   strengthDropdown = createSelect();
-  strengthDropdown.position(width / 2 - 75, 420);  // Dropdown below Strength button
+  strengthDropdown.position(width / 2 - 75, 400);  // Dropdown appears right on the Strength button
   strengthDropdown.option('Select a Strength Workout');
   strengthDropdown.option('1-min Push-Ups');
   strengthDropdown.option('1-min Planks');
   strengthDropdown.hide();  // Hide the dropdown initially
-
-  // Create Home, Profile, Tools buttons at the top-right of the screen
-  homeButton = createButton('Home');
-  homeButton.position(width - 150, 50);  // Position for Home button (top-right corner)
-  homeButton.size(100, 40);
-  homeButton.style('font-size', '18px');
-  homeButton.mousePressed(goHome);
-
-  profileButton = createButton('Profile');
-  profileButton.position(width - 150, 100);  // Position for Profile button (below Home)
-  profileButton.size(100, 40);
-  profileButton.style('font-size', '18px');
-  profileButton.mousePressed(goToProfile);
-
-  toolsButton = createButton('Tools');
-  toolsButton.position(width - 150, 150);  // Position for Tools button (below Profile)
-  toolsButton.size(100, 40);
-  toolsButton.style('font-size', '18px');
-  toolsButton.mousePressed(goToTools);
 }
 
-// Gradient function for background
+function draw() {
+  // The menu remains static; nothing to animate in draw yet
+  // If dropdown is being shown, animate it into position smoothly
+  if (showCardio) {
+    cardioDropdown.show();
+    cardioDropdown.position(width / 2 - 75, 300);  // Stay directly on the Cardio button
+  } else {
+    cardioDropdown.hide();
+  }
+
+  if (showStrength) {
+    strengthDropdown.show();
+    strengthDropdown.position(width / 2 - 75, 400);  // Stay directly on the Strength button
+  } else {
+    strengthDropdown.hide();
+  }
+}
+
+// Function to create the gradient background
 function drawGradient() {
   for (let i = 0; i <= height; i++) {
     let inter = map(i, 0, height, 0, 1);
-    let c = lerpColor(color(173, 216, 230), color(186, 85, 211), inter); // Blue to Light Purple
+    let c = lerpColor(color(173, 216, 230), color(138, 43, 226), inter); // Light blue to purple gradient
     stroke(c);
     line(0, i, width, i);
   }
 }
 
-function draw() {
-  // The menu remains static; nothing to animate in draw yet
+// Toggle the display of the Cardio dropdown
+function toggleCardioDropdown() {
+  showCardio = !showCardio;
+  if (showCardio) {
+    showStrength = false; // Hide strength dropdown if cardio is being shown
+  }
 }
 
-// Show cardio dropdown when Cardio button is pressed
-function showCardioDropdown() {
-  cardioDropdown.show();  // Show the Cardio dropdown
-  strengthDropdown.hide();  // Hide the Strength dropdown
-}
-
-// Show strength dropdown when Strength button is pressed
-function showStrengthDropdown() {
-  strengthDropdown.show();  // Show the Strength dropdown
-  cardioDropdown.hide();  // Hide the Cardio dropdown
-}
-
-// Functions for Home, Profile, and Tools buttons
-function goHome() {
-  console.log("Home Button Pressed");
-  // Add functionality for going back to the home screen or main menu
-}
-
-function goToProfile() {
-  console.log("Profile Button Pressed");
-  // Add functionality to navigate to the user's profile page
-}
-
-function goToTools() {
-  console.log("Tools Button Pressed");
-  // Add functionality to navigate to the tools section
+// Toggle the display of the Strength dropdown
+function toggleStrengthDropdown() {
+  showStrength = !showStrength;
+  if (showStrength) {
+    showCardio = false; // Hide cardio dropdown if strength is being shown
+  }
 }

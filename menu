@@ -1,13 +1,13 @@
-let state = "welcome";  
-let fadeAmount = 0;  
+let state = "welcome";
+let fadeAmount = 0;
 let startButton, backButton;
 let cardioButton, strengthButton;
 let cardioDropdown, strengthDropdown;
 let showCardio = false;
 let showStrength = false;
 let selectedWorkout = "";
-let countdownTime = 0;  
-let startTime = 0;  
+let countdownTime = 0;
+let startTime = 0;
 let level = 1;
 let min_Xp = 0;
 let max_Xp = 100;
@@ -75,27 +75,30 @@ function setup() {
   strengthDropdown.hide();
   strengthDropdown.changed(startSelectedStrength);
 
-outer_Xp = {
-    height:300,
-    length:50,
+  outer_Xp = {
+    height: 300,
+    length: 50,
     size: 1
-};
+  };
+}
 
 function draw() {
   if (state === "welcome") {
-    drawWelcomeScreen();  
+    drawWelcomeScreen();
   } else if (state === "workout") {
-    drawWorkoutMenu();  
+    drawWorkoutMenu();
   } else if (state === "countdown") {
-    drawCountdown();  
+    drawCountdown();
   }
-//Outer rectangle
+  
+  //Outer rectangle
   noFill();
   strokeWeight(4);
   stroke(0);
   rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
 
   //Inner rectangle
+
   min_Xp += XP_increment;
   min_Xp = min(min_Xp, max_Xp - 25);
 
@@ -112,29 +115,29 @@ function draw() {
 }
 
 function drawWelcomeScreen() {
-  background(173, 216, 230);  
+  background(173, 216, 230);
 
   textFont('Poppins');
   textAlign(CENTER);
-  textSize(64);  
-  textStyle(BOLD);  
-  fill(0);  
-  text('Welcome to FitQuest', width / 2, height / 2 - 100);  
+  textSize(64);
+  textStyle(BOLD);
+  fill(0);
+  text('Welcome to FitQuest', width / 2, height / 2 - 100);
 }
 
 function startGame() {
-  state = "workout";  
-  startButton.hide();  
-  showWorkoutMenu();  
+  state = "workout";
+  startButton.hide();
+  showWorkoutMenu();
 }
 
 function drawWorkoutMenu() {
-  drawGradient();  
+  drawGradient();
   fill(0);
-  textSize(48);  
-  textStyle(BOLD);  
+  textSize(48);
+  textStyle(BOLD);
   textAlign(CENTER);
-  text('Select Your Workout', width / 2, 150);  
+  text('Select Your Workout', width / 2, 150);
 
   cardioButton.position(width / 2 - 125, 300);
   strengthButton.position(width / 2 - 125, 400);
@@ -149,7 +152,7 @@ function toggleCardioDropdown() {
   showCardio = !showCardio;
   if (showCardio) {
     cardioDropdown.show();
-    strengthDropdown.hide();  
+    strengthDropdown.hide();
   } else {
     cardioDropdown.hide();
   }
@@ -159,7 +162,7 @@ function toggleStrengthDropdown() {
   showStrength = !showStrength;
   if (showStrength) {
     strengthDropdown.show();
-    cardioDropdown.hide();  
+    cardioDropdown.hide();
   } else {
     strengthDropdown.hide();
   }
@@ -168,9 +171,9 @@ function toggleStrengthDropdown() {
 function startSelectedCardio() {
   let workout = cardioDropdown.value();
   if (workout === '15-min Run') {
-    countdownTime = 15 * 60;  
+    countdownTime = 15 * 60;
   } else if (workout === '30-min Run') {
-    countdownTime = 30 * 60;  
+    countdownTime = 30 * 60;
   }
   if (workout !== 'Select your workout') {
     startCountdown();
@@ -180,9 +183,9 @@ function startSelectedCardio() {
 function startSelectedStrength() {
   let workout = strengthDropdown.value();
   if (workout === '1-min Push-Ups') {
-    countdownTime = 1 * 60;  
+    countdownTime = 1 * 60;
   } else if (workout === '1-min Planks') {
-    countdownTime = 1 * 60;  
+    countdownTime = 1 * 60;
   }
   if (workout !== 'Select your workout') {
     startCountdown();
@@ -190,23 +193,23 @@ function startSelectedStrength() {
 }
 
 function startCountdown() {
-  state = "countdown";  
-  startTime = millis();  
-  cardioButton.hide();  
+  state = "countdown";
+  startTime = millis();
+  cardioButton.hide();
   strengthButton.hide();
   cardioDropdown.hide();
   strengthDropdown.hide();
-  backButton.show();  
+  backButton.show();
 }
 
 function drawCountdown() {
-  background(173, 216, 230);  
+  background(173, 216, 230);
 
-  let timePassed = floor((millis() - startTime) / 1000);  
-  let remainingTime = countdownTime - timePassed;  
+  let timePassed = floor((millis() - startTime) / 1000);
+  let remainingTime = countdownTime - timePassed;
 
   if (remainingTime <= 0) {
-    remainingTime = 0;  
+    remainingTime = 0;
   }
 
   let minutes = floor(remainingTime / 60);
@@ -215,15 +218,15 @@ function drawCountdown() {
 
   textFont('Poppins');
   textAlign(CENTER);
-  textSize(128);  
-  fill(0);  
-  text(timeString, width / 2, height / 2);  
+  textSize(128);
+  fill(0);
+  text(timeString, width / 2, height / 2);
 
   if (remainingTime === 0) {
     setTimeout(() => {
-      state = "workout";  
-      showWorkoutMenu();  
-      backButton.hide();  
+      state = "workout";
+      showWorkoutMenu();
+      backButton.hide();
     }, 1000);
   }
 }
@@ -231,15 +234,14 @@ function drawCountdown() {
 function goBackToWorkoutMenu() {
   state = "workout";
   showWorkoutMenu();
-  backButton.hide();  
+  backButton.hide();
 }
 
 function drawGradient() {
   for (let i = 0; i <= height; i++) {
     let inter = map(i, 0, height, 0, 1);
-    let c = lerpColor(color(173, 216, 230), color(138, 43, 226), inter);  
+    let c = lerpColor(color(173, 216, 230), color(138, 43, 226), inter);
     stroke(c);
     line(0, i, width, i);
   }
 }
-

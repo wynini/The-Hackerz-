@@ -205,17 +205,16 @@ function drawCountdown() {
 
   if (remainingTime <= 0) {
     remainingTime = 0;
-    coins_amount = floor(countdownTime / 60);
-    setTimeout(() => {
-      gameState = "workout";
-      showWorkoutMenu();
-      backButton.hide();
-    }, 1000);
   }
 
   let minutes = floor(remainingTime / 60);
   let seconds = remainingTime % 60;
   let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
+
+  let minutesPassed = floor(timePassed / 60);
+  if (minutesPassed > coins_amount) {
+    coins_amount = minutesPassed; // Add 1 coin for every minute passed
+  }
 
   textFont('Poppins');
   textAlign(CENTER);

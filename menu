@@ -8,6 +8,12 @@ let showStrength = false;
 let selectedWorkout = "";
 let countdownTime = 0;  
 let startTime = 0;  
+let level = 1;
+let min_Xp = 0;
+let max_Xp = 100;
+let XP_increment = 1;
+var outer_Xp;
+
 
 function setup() {
   createCanvas(1000, 1000);
@@ -78,6 +84,27 @@ function draw() {
   } else if (state === "countdown") {
     drawCountdown();  
   }
+//Outer rectangle
+  noFill();
+  strokeWeight(4);
+  stroke(0);
+  rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
+
+  //Inner rectangle
+
+  min_Xp += XP_increment;
+  min_Xp = min(min_Xp, max_Xp);
+
+  noStroke();
+  fill(0, 0, 128);
+  let barWidth = (min_Xp / max_Xp) * (outer_Xp.height + 100);
+  rect(50, 30, barWidth, outer_Xp.length * (outer_Xp.size));
+
+  //Display level
+  fill(0);
+  textSize(16);
+  text(`Level: ${level}`, 50, 20);
+
 }
 
 function drawWelcomeScreen() {

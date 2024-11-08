@@ -13,7 +13,7 @@ let min_Xp = 0;
 let max_Xp = 100;
 let XP_increment = 1;
 let outer_Xp;
-let coins_amount = 10; 
+let coins_amount = 10;
 let shopButton;
 
 function setup() {
@@ -131,6 +131,7 @@ function drawCoin() {
 
 function drawWelcomeScreen() {
   background(173, 216, 230);
+
   textFont('Poppins');
   textAlign(CENTER);
   textSize(64);
@@ -232,8 +233,9 @@ function drawCountdown() {
   let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
 
   let minutesPassed = floor(timePassed / 60);
-  if (minutesPassed > coins_amount) {
-    coins_amount = minutesPassed;
+  
+  if (minutesPassed > (coins_amount - 10)) {
+    coins_amount = 10 + minutesPassed;
   }
 
   textFont('Poppins');
@@ -266,12 +268,12 @@ function hideWorkoutButtons() {
 }
 
 let shopItems = [
-  { name: "Cat 🐱", price: 10 },
-  { name: "Dog 🐶", price: 10 },
+  { name: "Cat 🐱", price: 5 },
+  { name: "Dog 🐶", price: 5 },
   { name: "Bow 🎀", price: 3 },
   { name: "Hat 🎩", price: 3 },
-  { name: "Sword 🗡️", price: 15 },
-  { name: "Shield 🛡️", price: 20 }
+  { name: "Sword 🗡️", price: 8 },
+  { name: "Shield 🛡️", price: 10 }
 ];
 
 function drawShopMenu() {
@@ -289,5 +291,5 @@ function drawShopMenu() {
     text(`${item.name}: ${item.price} coins`, width / 2, startY + i * 40);
   }
 
-  backButton.show();
+  backButton.show(); 
 }

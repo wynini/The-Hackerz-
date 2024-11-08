@@ -1,4 +1,4 @@
-let state = "welcome";
+let gameState = "welcome"; 
 let fadeAmount = 0;
 let startButton, backButton;
 let cardioButton, strengthButton;
@@ -13,7 +13,6 @@ let min_Xp = 0;
 let max_Xp = 100;
 let XP_increment = 1;
 var outer_Xp;
-
 
 function setup() {
   createCanvas(1000, 1000);
@@ -83,35 +82,79 @@ function setup() {
 }
 
 function draw() {
-  if (state === "welcome") {
+  if (gameState === "welcome") {
     drawWelcomeScreen();
-  } else if (state === "workout") {
+  } else if (gameState === "workout") {
     drawWorkoutMenu();
-  } else if (state === "countdown") {
+  } else if (gameState === "countdown") {
     drawCountdown();
   }
   
-  //Outer rectangle
+  drawXPBar();
+}
+
+function drawXPBar() {
+  // Outer rectangle
   noFill();
   strokeWeight(4);
   stroke(0);
   rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
 
-  //Inner rectangle
-
-  min_Xp += XP_increment;
-  min_Xp = min(min_Xp, max_Xp - 25);
-
   noStroke();
   fill(0, 0, 128);
   let barWidth = (min_Xp / max_Xp) * (outer_Xp.height + 100);
-  rect(50, 30, barWidth, outer_Xp.length * (outer_Xp.size));
+  rect(50, 30, barWidth, outer_Xp.length * outer_Xp.size);
 
-  //Display level
   fill(0);
   textSize(16);
   text(`Level: ${level}`, 50, 20);
+}
 
+function drawCountdown() {
+  background(173, 216, 230);
+
+  let timePassed = floor((millis() - startTime) / 1000);
+  let remainingTime = countdownTime - timePassed;
+
+  if (remainingTime <= 0) {
+    remainingTime = 0;
+  }
+
+  let minutes = floor(remainingTime / 60);
+  let seconds = remainingTime % 60;
+  let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
+
+  textFont('Poppins');
+  textAlign(CENTER);
+  textSize(128);
+  fill(0);
+  text(timeString, width / 2, height / 2);
+
+  if (remainingTime === 0) {
+    setTimeout(() => {
+      gameState = "workout"; 
+      showWorkoutMenu();
+      backButton.hide();
+    }, 1000);
+  }
+
+  if (remainingTime > 0) {
+    updateXP();
+  }
+}
+
+function updateXP() {
+  min_Xp += XP_increment;
+  min_Xp = min(min_Xp, max_Xp - 25); 
+  if (min_Xp >= max_Xp) {
+    levelUp();
+  }
+}
+
+function levelUp() {
+  level += 1;
+  min_Xp = 0; 
+  max_Xp += 50; 
 }
 
 function drawWelcomeScreen() {
@@ -126,7 +169,7 @@ function drawWelcomeScreen() {
 }
 
 function startGame() {
-  state = "workout";
+  gameState = "workout"; 
   startButton.hide();
   showWorkoutMenu();
 }
@@ -193,7 +236,7 @@ function startSelectedStrength() {
 }
 
 function startCountdown() {
-  state = "countdown";
+  gameState = "countdown"; 
   startTime = millis();
   cardioButton.hide();
   strengthButton.hide();
@@ -202,37 +245,8 @@ function startCountdown() {
   backButton.show();
 }
 
-function drawCountdown() {
-  background(173, 216, 230);
-
-  let timePassed = floor((millis() - startTime) / 1000);
-  let remainingTime = countdownTime - timePassed;
-
-  if (remainingTime <= 0) {
-    remainingTime = 0;
-  }
-
-  let minutes = floor(remainingTime / 60);
-  let seconds = remainingTime % 60;
-  let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
-
-  textFont('Poppins');
-  textAlign(CENTER);
-  textSize(128);
-  fill(0);
-  text(timeString, width / 2, height / 2);
-
-  if (remainingTime === 0) {
-    setTimeout(() => {
-      state = "workout";
-      showWorkoutMenu();
-      backButton.hide();
-    }, 1000);
-  }
-}
-
 function goBackToWorkoutMenu() {
-  state = "workout";
+  gameState = "workout"; 
   showWorkoutMenu();
   backButton.hide();
 }

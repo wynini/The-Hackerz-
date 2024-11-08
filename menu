@@ -79,7 +79,7 @@ outer_Xp = {
     height:300,
     length:50,
     size: 1
-}
+};
 
 function draw() {
   if (state === "welcome") {

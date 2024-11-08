@@ -13,6 +13,7 @@ let min_Xp = 0;
 let max_Xp = 100;
 let XP_increment = 1;
 var outer_Xp;
+let coins_amount = 0;
 
 function setup() {
   createCanvas(1000, 1000);
@@ -89,73 +90,85 @@ function draw() {
   } else if (gameState === "countdown") {
     drawCountdown();
   }
-  
-  drawXPBar();
+  drawCoin();
+  //drawXPBar();
 }
 
-function drawXPBar() {
-  // Outer rectangle
-  noFill();
-  strokeWeight(4);
-  stroke(0);
-  rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
+function drawCoin() {
+  fill(255, 215, 0);
+  strokeWeight(5);
+  stroke(218, 165, 32);
+  ellipse(50, 40, 60, 60);
 
+  fill(0);
   noStroke();
-  fill(0, 0, 128);
-  let barWidth = (min_Xp / max_Xp) * (outer_Xp.height + 100);
-  rect(50, 30, barWidth, outer_Xp.length * outer_Xp.size);
-
-  fill(0);
-  textSize(16);
-  text(`Level: ${level}`, 50, 20);
+  textSize(15);
+  text({coins_amount}, 150, 50);
 }
 
-function drawCountdown() {
-  background(173, 216, 230);
+// function drawXPBar() {
+//   // Outer rectangle
+//   noFill();
+//   strokeWeight(4);
+//   stroke(0);
+//   rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
 
-  let timePassed = floor((millis() - startTime) / 1000);
-  let remainingTime = countdownTime - timePassed;
+//   noStroke();
+//   fill(0, 0, 128);
+//   let barWidth = (min_Xp / max_Xp) * (outer_Xp.height + 100);
+//   rect(50, 30, barWidth, outer_Xp.length * outer_Xp.size);
 
-  if (remainingTime <= 0) {
-    remainingTime = 0;
-  }
+//   fill(0);
+//   textSize(16);
+//   text(`Level: ${level}`, 50, 20);
+// }
 
-  let minutes = floor(remainingTime / 60);
-  let seconds = remainingTime % 60;
-  let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
+// function drawCountdown() {
+//   background(173, 216, 230);
 
-  textFont('Poppins');
-  textAlign(CENTER);
-  textSize(128);
-  fill(0);
-  text(timeString, width / 2, height / 2);
+//   let timePassed = floor((millis() - startTime) / 1000);
+//   let remainingTime = countdownTime - timePassed;
 
-  if (remainingTime === 0) {
-    setTimeout(() => {
-      gameState = "workout"; 
-      showWorkoutMenu();
-      backButton.hide();
-    }, 1000);
-  }
+//   if (remainingTime <= 0) {
+//     remainingTime = 0;
+//   }
 
-  if (remainingTime > 0) {
-    updateXP();
-  }
-}
+//   let minutes = floor(remainingTime / 60);
+//   let seconds = remainingTime % 60;
+//   let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
 
-function updateXP() {
-  min_Xp += XP_increment;
-  min_Xp = min(min_Xp, max_Xp - 25); 
-  if (min_Xp >= max_Xp) {
-    levelUp();
-  }
-}
+//   textFont('Poppins');
+//   textAlign(CENTER);
+//   textSize(128);
+//   fill(0);
+//   text(timeString, width / 2, height / 2);
 
-function levelUp() {
-  level += 1;
-  min_Xp = 0; 
-  max_Xp += 50; 
-}
+//   if (remainingTime == 0) {
+//     setTimeout(() => {
+//       gameState = "workout";
+//       showWorkoutMenu();
+//       backButton.hide();
+//     }, 1000);
+//   }
+
+//   if (remainingTime > 0) {
+//     updateXP();
+//   }
+// }
+
+// function updateXP() {
+//   min_Xp += XP_increment;
+//   min_Xp = min(min_Xp, max_Xp - 25);
+//   if (min_Xp >= max_Xp) {
+//     levelUp();
+//   }
+// }
+
+// function levelUp() {
+//   level += 1;
+//   min_Xp == 0;
+//   max_Xp += 50;
+// }
 
 function drawWelcomeScreen() {
   background(173, 216, 230);

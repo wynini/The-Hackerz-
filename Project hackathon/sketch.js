@@ -82,6 +82,12 @@ function setup() {
   };
 }
 
+function startGame() {
+  gameState = "workout"; 
+  startButton.hide();
+  showWorkoutMenu();
+}
+
 function draw() {
   if (gameState === "welcome") {
     drawWelcomeScreen();
@@ -91,7 +97,6 @@ function draw() {
     drawCountdown();
   }
   drawCoin();
-  //drawXPBar();
 }
 
 function drawCoin() {
@@ -103,72 +108,8 @@ function drawCoin() {
   fill(0);
   noStroke();
   textSize(15);
-  text({coins_amount}, 150, 50);
+  text(`Coins: ${nf(coins_amount, 3, 0)}`, 150, 50);
 }
-
-// function drawXPBar() {
-//   // Outer rectangle
-//   noFill();
-//   strokeWeight(4);
-//   stroke(0);
-//   rect(50, 30, outer_Xp.height * outer_Xp.size, outer_Xp.length * outer_Xp.size);
-
-//   noStroke();
-//   fill(0, 0, 128);
-//   let barWidth = (min_Xp / max_Xp) * (outer_Xp.height + 100);
-//   rect(50, 30, barWidth, outer_Xp.length * outer_Xp.size);
-
-//   fill(0);
-//   textSize(16);
-//   text(`Level: ${level}`, 50, 20);
-// }
-
-// function drawCountdown() {
-//   background(173, 216, 230);
-
-//   let timePassed = floor((millis() - startTime) / 1000);
-//   let remainingTime = countdownTime - timePassed;
-
-//   if (remainingTime <= 0) {
-//     remainingTime = 0;
-//   }
-
-//   let minutes = floor(remainingTime / 60);
-//   let seconds = remainingTime % 60;
-//   let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
-
-//   textFont('Poppins');
-//   textAlign(CENTER);
-//   textSize(128);
-//   fill(0);
-//   text(timeString, width / 2, height / 2);
-
-//   if (remainingTime == 0) {
-//     setTimeout(() => {
-//       gameState = "workout";
-//       showWorkoutMenu();
-//       backButton.hide();
-//     }, 1000);
-//   }
-
-//   if (remainingTime > 0) {
-//     updateXP();
-//   }
-// }
-
-// function updateXP() {
-//   min_Xp += XP_increment;
-//   min_Xp = min(min_Xp, max_Xp - 25);
-//   if (min_Xp >= max_Xp) {
-//     levelUp();
-//   }
-// }
-
-// function levelUp() {
-//   level += 1;
-//   min_Xp == 0;
-//   max_Xp += 50;
-// }
 
 function drawWelcomeScreen() {
   background(173, 216, 230);
@@ -179,12 +120,6 @@ function drawWelcomeScreen() {
   textStyle(BOLD);
   fill(0);
   text('Welcome to FitQuest', width / 2, height / 2 - 100);
-}
-
-function startGame() {
-  gameState = "workout"; 
-  startButton.hide();
-  showWorkoutMenu();
 }
 
 function drawWorkoutMenu() {
@@ -238,9 +173,7 @@ function startSelectedCardio() {
 
 function startSelectedStrength() {
   let workout = strengthDropdown.value();
-  if (workout === '1-min Push-Ups') {
-    countdownTime = 1 * 60;
-  } else if (workout === '1-min Planks') {
+  if (workout === '1-min Push-Ups' || workout === '1-min Planks') {
     countdownTime = 1 * 60;
   }
   if (workout !== 'Select your workout') {
@@ -262,6 +195,33 @@ function goBackToWorkoutMenu() {
   gameState = "workout"; 
   showWorkoutMenu();
   backButton.hide();
+}
+
+function drawCountdown() {
+  background(173, 216, 230);
+
+  let timePassed = floor((millis() - startTime) / 1000);
+  let remainingTime = countdownTime - timePassed;
+
+  if (remainingTime <= 0) {
+    remainingTime = 0;
+    coins_amount = floor(countdownTime / 60);
+    setTimeout(() => {
+      gameState = "workout";
+      showWorkoutMenu();
+      backButton.hide();
+    }, 1000);
+  }
+
+  let minutes = floor(remainingTime / 60);
+  let seconds = remainingTime % 60;
+  let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
+
+  textFont('Poppins');
+  textAlign(CENTER);
+  textSize(128);
+  fill(0);
+  text(timeString, width / 2, height / 2);
 }
 
 function drawGradient() {

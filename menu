@@ -1,0 +1,111 @@
+let cardioButton, strengthButton;
+let cardioDropdown, strengthDropdown;
+let homeButton, profileButton, toolsButton;
+
+function setup() {
+  // Create a larger canvas for the game (800x800)
+  createCanvas(1000, 1000);
+
+  // Draw gradient background
+  drawGradient();
+
+  // Load and set the font to Arial Black
+  textFont('Arial Black');
+
+  // Title of the Menu with bigger font size
+  textAlign(CENTER);
+  textSize(48); // Larger font size for the title
+  fill(0);
+  text('Select Your Workout', width / 2, 100);  // Adjusted position for larger canvas
+
+  // Create Cardio Button
+  cardioButton = createButton('Cardio');
+  cardioButton.position(width / 2 - 75, 200);  // Adjusted button position
+  cardioButton.size(150, 50);  // Increased button size
+  cardioButton.style('font-size', '24px');  // Increase font size for button text
+  cardioButton.mousePressed(showCardioDropdown);
+
+  // Create Strength Button
+  strengthButton = createButton('Strength');
+  strengthButton.position(width / 2 - 75, 270);  // Adjusted button position
+  strengthButton.size(150, 50);  // Increased button size
+  strengthButton.style('font-size', '24px');  // Increase font size for button text
+  strengthButton.mousePressed(showStrengthDropdown);
+
+  // Create the dropdown for cardio workouts (but hide it initially)
+  cardioDropdown = createSelect();
+  cardioDropdown.position(width / 2 - 75, 350);  // Dropdown below Cardio button
+  cardioDropdown.option('Select a Cardio Workout');
+  cardioDropdown.option('2KM Run');
+  cardioDropdown.option('Jumping Jacks');
+  cardioDropdown.hide();  // Hide the dropdown initially
+
+  // Create the dropdown for strength workouts (but hide it initially)
+  strengthDropdown = createSelect();
+  strengthDropdown.position(width / 2 - 75, 420);  // Dropdown below Strength button
+  strengthDropdown.option('Select a Strength Workout');
+  strengthDropdown.option('1-min Push-Ups');
+  strengthDropdown.option('1-min Planks');
+  strengthDropdown.hide();  // Hide the dropdown initially
+
+  // Create Home, Profile, Tools buttons
+  homeButton = createButton('Home');
+  homeButton.position(50, 650);  // Position for Home button
+  homeButton.size(150, 50);
+  homeButton.style('font-size', '24px');
+  homeButton.mousePressed(goHome);
+
+  profileButton = createButton('Profile');
+  profileButton.position(250, 650);  // Position for Profile button
+  profileButton.size(150, 50);
+  profileButton.style('font-size', '24px');
+  profileButton.mousePressed(goToProfile);
+
+  toolsButton = createButton('Tools');
+  toolsButton.position(450, 650);  // Position for Tools button
+  toolsButton.size(150, 50);
+  toolsButton.style('font-size', '24px');
+  toolsButton.mousePressed(goToTools);
+}
+
+// Gradient function for background
+function drawGradient() {
+  for (let i = 0; i <= height; i++) {
+    let inter = map(i, 0, height, 0, 1);
+    let c = lerpColor(color(173, 216, 230), color(186, 85, 211), inter); // Blue to Light Purple
+    stroke(c);
+    line(0, i, width, i);
+  }
+}
+
+function draw() {
+  // The menu remains static; nothing to animate in draw yet
+}
+
+// Show cardio dropdown when Cardio button is pressed
+function showCardioDropdown() {
+  cardioDropdown.show();  // Show the Cardio dropdown
+  strengthDropdown.hide();  // Hide the Strength dropdown
+}
+
+// Show strength dropdown when Strength button is pressed
+function showStrengthDropdown() {
+  strengthDropdown.show();  // Show the Strength dropdown
+  cardioDropdown.hide();  // Hide the Cardio dropdown
+}
+
+// Functions for Home, Profile, and Tools buttons
+function goHome() {
+  console.log("Home Button Pressed");
+  // Add functionality for going back to the home screen or main menu
+}
+
+function goToProfile() {
+  console.log("Profile Button Pressed");
+  // Add functionality to navigate to the user's profile page
+}
+
+function goToTools() {
+  console.log("Tools Button Pressed");
+  // Add functionality to navigate to the tools section
+}

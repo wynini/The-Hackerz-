@@ -8,12 +8,7 @@ let showStrength = false;
 let selectedWorkout = "";
 let countdownTime = 0;
 let startTime = 0;
-let level = 1;
-let min_Xp = 0;
-let max_Xp = 100;
-let XP_increment = 1;
-let outer_Xp;
-let coins_amount = 10;
+let coins_amount = 10;  // Start with 10 coins
 let shopButton;
 
 function setup() {
@@ -83,12 +78,6 @@ function setup() {
   strengthDropdown.option('1-min Planks');
   strengthDropdown.hide();
   strengthDropdown.changed(startSelectedStrength);
-
-  outer_Xp = {
-    height: 300,
-    length: 50,
-    size: 1
-  };
 }
 
 function startGame() {
@@ -233,7 +222,8 @@ function drawCountdown() {
   let timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
 
   let minutesPassed = floor(timePassed / 60);
-  
+
+  // Increase coins for each minute passed
   if (minutesPassed > (coins_amount - 10)) {
     coins_amount = 10 + minutesPassed;
   }

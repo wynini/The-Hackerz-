@@ -8,7 +8,7 @@ let showStrength = false;
 let selectedWorkout = "";
 let countdownTime = 0;
 let startTime = 0;
-let coins_amount = 10;  // Start with 10 coins
+let coins_amount = 10;
 let shopButton;
 
 function setup() {
@@ -140,7 +140,9 @@ function drawWorkoutMenu() {
   cardioButton.position(width / 2 - 125, 300);
   strengthButton.position(width / 2 - 125, 400);
 
-  shopButton.show();
+  if (gameState === "workout") {
+    shopButton.show();
+  }
 }
 
 function showWorkoutMenu() {
@@ -205,6 +207,8 @@ function goBackToWorkoutMenu() {
   showWorkoutMenu();
   backButton.hide();
   fadeAmount = 255;
+  shopButton.show();
+  hideBuyButtons();
 }
 
 function drawCountdown() {
@@ -223,7 +227,6 @@ function drawCountdown() {
 
   let minutesPassed = floor(timePassed / 60);
 
-  // Increase coins for each minute passed
   if (minutesPassed > (coins_amount - 10)) {
     coins_amount = 10 + minutesPassed;
   }
@@ -266,20 +269,54 @@ let shopItems = [
   { name: "Shield 🛡️", price: 10 }
 ];
 
+let buyButtons = [];
+
 function drawShopMenu() {
-  background(255);
-
+  background(173, 216, 230);
   fill(0);
-  textSize(48);
   textAlign(CENTER);
-  text("Shop", width / 2, 100);
+  textSize(48);
+  text('Shop', width / 2, 150);
 
-  let startY = 200;
+  let yPosition = 220;
   for (let i = 0; i < shopItems.length; i++) {
     let item = shopItems[i];
+
+    fill(0);
     textSize(24);
-    text(`${item.name}: ${item.price} Coins`, width / 2, startY + i * 40);
+    text(item.name + " - " + item.price + " coins", width / 2 - 100, yPosition);
+
+    if (!buyButtons[i]) {
+      let buyButton = createButton('Buy');
+      buyButton.position(width / 2 + 50, yPosition - 10);
+      buyButton.size(80, 30);
+      buyButton.style('font-size', '16px');
+      buyButton.style('font-family', 'Poppins');
+      buyButton.style('background-color', '#ffffff');
+      buyButton.style('color', '#000000');
+      buyButton.mousePressed(() => purchaseItem(item));
+      buyButtons[i] = buyButton;
+    }
+    buyButtons[i].show();
+
+    yPosition += 60;
   }
 
-  backButton.show(); 
+  backButton.show();
+}
+
+function purchaseItem(item) {
+  if (coins_amount >= item.price) {
+    coins_amount -= item.price;
+    console.log("Purchased: " + item.name);
+    alert(`You have purchased: ${item.name}`);
+  } else {
+    alert("You don't have enough coins!");
+  }
+}
+
+function hideBuyButtons() {
+  for (let i = 0; i < buyButtons.length; i++) {
+    buyButtons[i].hide();
+  }
 }

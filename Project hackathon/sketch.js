@@ -1,4 +1,4 @@
-let gameState = "welcome"; 
+let gameState = "welcome";
 let fadeAmount = 0;
 let startButton, backButton, profileButton;
 let cardioButton, strengthButton;
@@ -10,10 +10,20 @@ let countdownTime = 0;
 let startTime = 0;
 let coins_amount = 10;
 let shopButton;
+let lastCoinTime = 0;
 let petsButton, accessoriesButton;
 let backButton2;
 let purchasedItems = [];
 let catImg, dogImg, bowImg, hatImg, swordImg, shieldImg;
+
+let messageVisibleTime = 0;
+let showMessage = false;
+let showBought = false;
+
+let notificationVisible = false;
+let notificationMessage = "";
+let notificationStartTime = 0;
+let notificationDuration = 3000;
 
 function preload() {
   catImg = loadImage('Cat.png');
@@ -45,7 +55,7 @@ function setup() {
   profileButton.style('background-color', '#ffffff');
   profileButton.style('color', '#000000');
   profileButton.mousePressed(openProfilePage);
-  profileButton.hide(); 
+  profileButton.hide();
 
   shopButton = createButton('🛒');
   shopButton.position(width - 70, 30);
@@ -55,7 +65,7 @@ function setup() {
   shopButton.style('color', '#000000');
   shopButton.mousePressed(openShop);
   shopButton.hide();
-  
+
   petButton = createButton('Pets');
   petButton.position(width / 2 - 125, 500);
   petButton.size(250, 70);
@@ -65,7 +75,7 @@ function setup() {
   petButton.style('color', '#000000');
   petButton.hide();
   petButton.mousePressed(openPetPage);
-  
+
   accessoriesButton = createButton('Accessories');
   accessoriesButton.position(width / 2 - 125, 600);
   accessoriesButton.size(250, 70);
@@ -95,7 +105,7 @@ function setup() {
   backButton4.style('color', '#000000');
   backButton4.hide();
   backButton4.mousePressed(goBackToWorkoutMenu);
-  
+
   backButton = createButton('Back');
   backButton.position(width / 2 - 50, height - 100);
   backButton.size(100, 40);
@@ -105,32 +115,32 @@ function setup() {
   backButton.style('color', '#000000');
   backButton.hide();
 
-  
-  
-backButton2 = createButton('Back');
-backButton2.position(width / 2 - 50, height - 100);
-backButton2.size(100, 40);
-backButton2.style('font-size', '20px');
-backButton2.style('font-family', 'Poppins');
-backButton2.style('background-color', '#ffffff');
-backButton2.style('color', '#000000');
-backButton2.hide(); 
-backButton2.mousePressed(goBackToWelcomePage); 
+
+
+  backButton2 = createButton('Back');
+  backButton2.position(width / 2 - 50, height - 100);
+  backButton2.size(100, 40);
+  backButton2.style('font-size', '20px');
+  backButton2.style('font-family', 'Poppins');
+  backButton2.style('background-color', '#ffffff');
+  backButton2.style('color', '#000000');
+  backButton2.hide();
+  backButton2.mousePressed(goBackToWelcomePage);
 
   if (gameState === "workout") {
     shopButton.show();
-    backButton.show(); 
-}
+    backButton.show();
+  }
 
-function goBackToWelcomePage() {
-  gameState = "welcome"; 
-  backButton2.hide(); 
-  cardioButton.hide();
-  strengthButton.hide();
-  startButton.show(); 
-  profileButton.show(); 
-}
-  
+  function goBackToWelcomePage() {
+    gameState = "welcome";
+    backButton2.hide();
+    cardioButton.hide();
+    strengthButton.hide();
+    startButton.show();
+    profileButton.show();
+  }
+
 
   cardioButton = createButton('Cardio');
   cardioButton.position(width / 2 - 125, 300);
@@ -180,12 +190,12 @@ function goBackToWelcomePage() {
 }
 
 function startGame() {
-  gameState = "workout"; 
+  gameState = "workout";
   startButton.hide();
-  profileButton.hide(); 
+  profileButton.hide();
   showWorkoutMenu();
   fadeAmount = 255;
-  backButton2.show(); 
+  backButton2.show();
 }
 
 function draw() {
@@ -196,21 +206,33 @@ function draw() {
   } else if (gameState === "countdown") {
     drawCountdown();
   } else if (gameState === "shop") {
-    drawShopMenu(); 
+    drawShopMenu();
   } else if (gameState === "profile") {
-    drawProfilePage(); 
+    drawProfilePage();
   } else if (gameState === "petPage") {
     drawPetPage();
   } else if (gameState === "accessoriesPage") {
     drawAccessoriesPage();
   }
-  
+
   drawCoin();
-  
+
   if (fadeAmount > 0) {
     fadeAmount -= 5;
     fill(255, 255, 255, fadeAmount);
     rect(0, 0, width, height);
+  }
+
+  if (notificationVisible) {
+    let elapsedTime = millis() - notificationStartTime;
+    if (elapsedTime < notificationDuration) {
+      fill(0); // Set text color
+      textSize(24); // Set text size
+      textAlign(CENTER, CENTER);
+      text(notificationMessage, width / 2, 300); // Display the message
+    } else {
+      notificationVisible = false; // Hide the notification after the duration
+    }
   }
 }
 
@@ -235,8 +257,8 @@ function drawWelcomeScreen() {
   textStyle(BOLD);
   fill(0);
   text('Welcome to FitQuest', width / 2, height / 2 - 100);
-  shopButton.hide(); 
-  profileButton.show(); 
+  shopButton.hide();
+  profileButton.show();
 }
 
 function drawWorkoutMenu() {
@@ -252,7 +274,7 @@ function drawWorkoutMenu() {
 
   if (gameState === "workout") {
     shopButton.show();
-    backButton2.show(); 
+    backButton2.show();
   }
 }
 
@@ -316,7 +338,7 @@ function startSelectedStrength() {
 }
 
 function startCountdown() {
-  gameState = "countdown"; 
+  gameState = "countdown";
   startTime = millis();
   cardioButton.hide();
   strengthButton.hide();
@@ -326,14 +348,14 @@ function startCountdown() {
 }
 
 function goBackToWorkoutMenu() {
-  gameState = "workout"; 
+  gameState = "workout";
   showWorkoutMenu();
   backButton.hide();
   fadeAmount = 255;
   shopButton.show();
   hideBuyButtons();
   petButton.hide(); // Hide pet and accessories buttons
-  accessoriesButton.hide(); 
+  accessoriesButton.hide();
   backButton3.hide();
   backButton4.hide();
 }
@@ -355,8 +377,33 @@ function drawCountdown() {
   let minutesPassed = floor(timePassed / 60);
 
   if (minutesPassed > (coins_amount - 10)) {
-    coins_amount = 10 + minutesPassed;
+    //coins_amount = 10 + minutesPassed;
+    coins_amount++;
+    //text("Congrats! You have earned one coin! ", 500, 700);
+    //print("Congrats! You have earned one coin!")
+    // text("Congrats! You have earned one coin! ", 500, 700);
   }
+
+  // Check if one minute has passed since the last coin was awarded
+  if (timePassed - lastCoinTime >= 60) {
+    lastCoinTime = timePassed; // Update the lastCoinTime
+    //coins_amount++; // Increment the coin count
+    showMessage = true;
+    messageVisibleTime = millis();
+    //text("Congratulations! You have earned one coin!", 500, 700);
+    //console.log("Congratulations! You have earned one coin!");
+  }
+
+  // Display the congratulatory message for 5 seconds
+  if (showMessage) {
+    textSize(45);
+    text("Congratulations! You have earned one coin!", 500, 700);
+    if (millis() - messageVisibleTime > 5000) { // Check if 5 seconds have passed
+      showMessage = false; // Hide the message
+    }
+
+  }
+
 
   textFont('Poppins');
   textAlign(CENTER);
@@ -380,7 +427,7 @@ function openShop() {
   fadeAmount = 255;
   hideWorkoutButtons();
   createShopButtons();
-  drawShopMenu(); 
+  drawShopMenu();
 }
 
 function hideWorkoutButtons() {
@@ -437,7 +484,7 @@ function buyItem(item) {
 }
 
 function drawShopMenu() {
-  background(173, 216, 230);  
+  background(173, 216, 230);
   fill(0);
   textAlign(CENTER);
   textSize(35);
@@ -448,8 +495,8 @@ function drawShopMenu() {
 
 
 function openProfilePage() {
-  gameState = "profile"; 
-  profileButton.hide(); 
+  gameState = "profile";
+  profileButton.hide();
   backButton.show();
 }
 
@@ -459,15 +506,15 @@ function drawProfilePage() {
   textSize(50);
   textAlign(CENTER);
 
- 
-  text('Profile', width / 2, 200);       
-  petButton.show(); 
+
+  text('Profile', width / 2, 200);
+  petButton.show();
   accessoriesButton.show();
   startButton.hide()
-   petButton.position(width / 2 - 125, 300); 
-  accessoriesButton.position(width / 2 - 125, 400); 
+  petButton.position(width / 2 - 125, 300);
+  accessoriesButton.position(width / 2 - 125, 400);
 
-  }
+}
 
 
 function drawPetPage() {
@@ -476,19 +523,19 @@ function drawPetPage() {
   textSize(48);
   textAlign(CENTER);
   text("Pets Page", width / 2, 150);
-  backButton3.show(); 
+  backButton3.show();
   petButton.hide();
   accessoriesButton.hide();
 
-  
+
   for (let itemName of purchasedItems) {
     if (itemName === 'Cat 🐱') {
-      image(catImg, width/3, height/3, 300, 300,); 
+      image(catImg, width / 3, height / 3, 300, 300,);
     } else if (itemName === 'Dog 🐶') {
-      image(dogImg, width/2, height/2, 300, 300, x=40);
+      image(dogImg, width / 2, height / 2, 300, 300, x = 40);
     }
   }
-    
+
 
 }
 
@@ -498,21 +545,21 @@ function drawAccessoriesPage() {
   textSize(48);
   textAlign(CENTER);
   text("Accessories Page", width / 2, 150);
-  backButton4.show(); 
+  backButton4.show();
   petButton.hide();
   accessoriesButton.hide();
 
-  let yOffset = 100; 
+  let yOffset = 100;
   for (let itemName of purchasedItems) {
-    imageMode(100,100);
-  if (itemName === 'Bow 🎀') {
-    image(bowImg, width / 2, yOffset + 100, 100, 100);
-  } else if (itemName === 'Hat 🎩') {
-    image(hatImg, width / 2, yOffset + 200, 100, 100);
-  } else if (itemName === 'Sword 🗡️') {
-    image(swordImg, width / 2, yOffset + 300, 100, 100);
-  } else if (itemName === 'Shield 🛡️') {
-    image(shieldImg, width / 2, yOffset + 400, 100, 100);
+    imageMode(100, 100);
+    if (itemName === 'Bow 🎀') {
+      image(bowImg, width / 2, yOffset + 100, 100, 100);
+    } else if (itemName === 'Hat 🎩') {
+      image(hatImg, width / 2, yOffset + 200, 100, 100);
+    } else if (itemName === 'Sword 🗡️') {
+      image(swordImg, width / 2, yOffset + 300, 100, 100);
+    } else if (itemName === 'Shield 🛡️') {
+      image(shieldImg, width / 2, yOffset + 400, 100, 100);
+    }
   }
-}
 }
